@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
     std::string path = "/mnt/c/texlive/2021/bin/win32/";
     std::string uplatexcmd = path + "uplatex.exe " + gmap.texname + " > /dev/null 2>&1 ; ";
     std::string dvipdfmxcmd = path + "dvipdfmx.exe " + gmap.dviname + " > /dev/null 2>&1 ; ";
-    std::string pdfcropcmd = path + "pdfcrop.exe --margins \"30\" " + gmap.pdfname + " " + gmap.pdfname + " > /dev/null 2>&1 ; ";
+    std::string pdfcropcmd = path + "pdfcrop.exe " + gmap.pdfname + " " + gmap.pdfname + " > /dev/null 2>&1 ; ";
     std::string rmcmd = "rm " + gmap.dviname + " " + gmap.auxname + " " + gmap.logname;
     if (!gmap.F_tex) {
         rmcmd += " " + gmap.texname;
