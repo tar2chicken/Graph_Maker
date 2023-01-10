@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
         return 1;
     }
     for (int i = 0; i < gmap.sources.size(); i++) {
-        gmmc.writeData(texfile, tables.at(i), gmap.sources.at(i).color, gmap.sources.at(i).F_with_line);
+        gmmc.writeData(texfile, tables.at(i), gmap.sources.at(i).color, gmap.sources.at(i).F_with_line, gmap.sources.at(i).F_with_error);
     }
     if (gmap.sources.size() > 1) {
         for (int i = 0; i < gmap.sources.size(); i++) {

@@ -18,6 +18,7 @@ class GMArgProc {
                 std::string color;
                 std::string title;
                 bool F_with_line;
+                bool F_with_error;
 
                 /// @brief constructor
                 source();

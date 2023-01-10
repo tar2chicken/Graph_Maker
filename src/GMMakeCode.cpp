@@ -116,14 +116,13 @@ int GMMakeCode::writeScale(std::ofstream& texfile) {
     return 0;
 }
 
-void GMMakeCode::writeData(std::ofstream& texfile, const std::vector<std::vector<double>>& table, const std::string color, const bool F_with_line) {
+void GMMakeCode::writeData(std::ofstream& texfile, const std::vector<std::vector<double>>& table, const std::string color, const bool F_with_line, const bool F_with_error) {
     if (!F_with_line) {
         for (int i = 0; i < table.size(); i++) {
             if ((table.at(i).at(0)>(this->xmin)) && (table.at(i).at(0)<(this->xmax)) && (table.at(i).at(1)>(this->ymin)) && (table.at(i).at(1)<(this->ymax))) {
                 texfile << "    \\fill[" << color << "] (" << this->xPosition(table.at(i).at(0)) << ", " << this->yPosition(table.at(i).at(1)) << ") circle [radius=1pt];" << std::endl;
             }
         }
-        texfile << std::endl;
     } else {
         texfile << "    \\draw[" << color << ", line width=1pt]";
         int line_count = 0;
@@ -140,8 +139,21 @@ void GMMakeCode::writeData(std::ofstream& texfile, const std::vector<std::vector
                 }
             }
         }
-        texfile << ";\n" << std::endl;
+        texfile << ";" << std::endl;
     }
+    if (F_with_error) {
+        for (int i = 0; i < table.size(); i++) {
+            if ((table.at(i).at(0)>(this->xmin)) && (table.at(i).at(0)<(this->xmax)) && (table.at(i).at(1)>(this->ymin)) && (table.at(i).at(1)<(this->ymax)) && (table.at(i).size()>=3)) {
+                double x = table.at(i).at(0);
+                double y = table.at(i).at(1);
+                double ey = table.at(i).at(2);
+                texfile << "    \\draw[thick] (" << this->xPosition(x) - 0.1 << ", " << this->yPosition(y+ey) << ") -- (" << this->xPosition(x) + 0.1 << ", " << this->yPosition(y+ey) << ");" << std::endl;
+                texfile << "    \\draw[thick] (" << this->xPosition(x) - 0.1 << ", " << this->yPosition(y-ey) << ") -- (" << this->xPosition(x) + 0.1 << ", " << this->yPosition(y-ey) << ");" << std::endl;
+                texfile << "    \\draw[thick] (" << this->xPosition(x) << ", " << this->yPosition(y+ey) << ") -- (" << this->xPosition(x) << ", " << this->yPosition(y-ey) << ");" << std::endl;
+            }
+        }
+    }
+    texfile << std::endl;
     return;
 }
 
