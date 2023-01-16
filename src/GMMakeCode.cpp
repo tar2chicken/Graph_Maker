@@ -22,21 +22,32 @@ GMMakeCode::GMMakeCode() {
 
 void GMMakeCode::getMinMax(const std::vector<std::vector<std::vector<double>>>& tables) {
     for (int i = 0; i < tables.size(); i++) {
-        std::vector<double> x, y;
+        // get xmin and xmax
+        std::vector<double> x;
         for (int j = 0; j < tables.at(i).size(); j++) {
             x.push_back(tables.at(i).at(j).at(0));
-            y.push_back(tables.at(i).at(j).at(1));
         }
         if (i == 0) {
             this->xmin = *(std::min_element(x.begin(), x.end()));
             this->xmax = *(std::max_element(x.begin(), x.end()));
-            this->ymin = *(std::min_element(y.begin(), y.end()));
-            this->ymax = *(std::max_element(y.begin(), y.end()));
         } else {
             this->xmin = std::min(this->xmin, *(std::min_element(x.begin(), x.end())));
             this->xmax = std::max(this->xmax, *(std::max_element(x.begin(), x.end())));
-            this->ymin = std::min(this->ymin, *(std::min_element(y.begin(), y.end())));
-            this->ymax = std::max(this->ymax, *(std::max_element(y.begin(), y.end())));
+        }
+
+        // get ymin and ymax
+        for (int k = 1; k < tables.at(i).at(0).size(); k++) {
+            std::vector<double> y;
+            for (int j = 0; j < tables.at(i).size(); j++) {
+                y.push_back(tables.at(i).at(j).at(k));
+            }
+            if (i==0 && k==1) {
+                this->ymin = *(std::min_element(y.begin(), y.end()));
+                this->ymax = *(std::max_element(y.begin(), y.end()));
+            } else {
+                this->ymin = std::min(this->ymin, *(std::min_element(y.begin(), y.end())));
+                this->ymax = std::max(this->ymax, *(std::max_element(y.begin(), y.end())));
+            }
         }
     }
     return;
