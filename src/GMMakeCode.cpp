@@ -4,6 +4,7 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
+#include <regex>
 #include "GMMakeCode.hpp"
 
 GMMakeCode::GMMakeCode() {
@@ -168,7 +169,8 @@ void GMMakeCode::writeData(std::ofstream& texfile, const std::vector<std::vector
     return;
 }
 
-void GMMakeCode::writeLegend(std::ofstream& texfile, const std::string title, const std::string color, const bool F_with_line) {
+void GMMakeCode::writeLegend(std::ofstream& texfile, std::string title, const std::string color, const bool F_with_line) {
+    title = std::regex_replace(title, std::regex("_"), "\\_");
     double y_position = this->height - 0.8 - 0.6 * this->legend_count;
     texfile << "    \\node[left] at (" << this->width - 1.4 << ", " << y_position << ") {" << title << "};" << std::endl;
     if (!F_with_line) {
