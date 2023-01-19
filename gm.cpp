@@ -46,9 +46,17 @@ int main(int argc, char** argv) {
     if (error_code == 1) {
         return 1;
     }
+
     for (int i = 0; i < gmap.sources.size(); i++) {
-        gmmc.writeData(texfile, tables.at(i), gmap.sources.at(i).color, gmap.sources.at(i).F_with_line, gmap.sources.at(i).F_with_error);
+        if (!gmap.sources.at(i).F_with_error) {
+            for (int column = 1; column < tables.at(i).at(0).size(); column++) {
+                gmmc.writeData(texfile, tables.at(i), column, gmap.sources.at(i).color, gmap.sources.at(i).F_with_line, gmap.sources.at(i).F_with_error);
+            }
+        } else {
+            gmmc.writeData(texfile, tables.at(i), 1, gmap.sources.at(i).color, gmap.sources.at(i).F_with_line, gmap.sources.at(i).F_with_error);
+        }
     }
+
     if (gmap.sources.size() > 1) {
         for (int i = 0; i < gmap.sources.size(); i++) {
             gmmc.writeLegend(texfile, gmap.sources.at(i).title, gmap.sources.at(i).color, gmap.sources.at(i).F_with_line);

@@ -55,10 +55,11 @@ class GMMakeCode {
         /// @brief write code of plot to tex file
         /// @param texfile tex file (call by reference)
         /// @param table table (call by reference)
+        /// @param column column
         /// @param color color
         /// @param F_with_line flag of with_line
         /// @param F_with_error flag of with_error
-        void writeData(std::ofstream& texfile, const std::vector<std::vector<double>>& table, const std::string color, const bool F_with_line, const bool F_with_error);
+        void writeData(std::ofstream& texfile, const std::vector<std::vector<double>>& table, const int column, const std::string color, const bool F_with_line, const bool F_with_error);
 
         /// @brief write code of graph legend to tex file
         /// @param texfile tex file (call by reference)
