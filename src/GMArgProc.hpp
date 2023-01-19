@@ -68,9 +68,6 @@ class GMArgProc {
         /// @param argv array of arguments
         void setArguments(int argc, char** argv);
 
-        /// @brief display arguments
-        void printArguments();
-
         /// @brief process command line arguments
         /// @return 0:OK, 1:ERROR, 2:version, help
         int process();
@@ -94,7 +91,7 @@ class GMArgProc {
 
         /// @brief set output file name
         /// @return 0:OK, 1:ERROR
-        int setOfile();
+        int setOutputFile();
 };
 
 #endif

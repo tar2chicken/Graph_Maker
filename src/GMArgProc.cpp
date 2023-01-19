@@ -39,13 +39,6 @@ void GMArgProc::setArguments(int argc, char** argv) {
     return;
 }
 
-void GMArgProc::printArguments() {
-    for (int i = 0; i < (this->arguments).size(); i++) {
-        std::cout << this->arguments.at(i) << std::endl;
-    }
-    return;
-}
-
 int GMArgProc::process() {
     // processing when displaying version and help
     if (this->arguments.size() == 1) {
@@ -87,7 +80,7 @@ int GMArgProc::process() {
     }
 
     // set output file name
-    error_code = setOfile();
+    error_code = setOutputFile();
     if (error_code == 1) {
         return 1;
     }
@@ -126,10 +119,10 @@ int GMArgProc::getSource(int& i) {
     }
 
     // get optional properties of source
-    // [file_name]  -c  [color]  -t  [title]  -l  (argument.size)
-    //      i       i+1   i+2    i+3   i+4    i+5       i+6
+    // [file_name]  -c  [color]  -t  [title]  -l  -e  (arguments.size)
+    //      i       i+1   i+2    i+3   i+4    i+5 i+6     i+7
     int j = i;
-    while (j+1 < std::min(i+6, static_cast<int>(this->arguments.size()))) {
+    while (j+1 < std::min(i+7, static_cast<int>(this->arguments.size()))) {
         // get color, if no color, return 1
         if (this->arguments.at(j+1) == "-c") {
             j++;
@@ -289,7 +282,7 @@ int GMArgProc::getOption(int& i) {
     return 2;
 }
 
-int GMArgProc::setOfile() {
+int GMArgProc::setOutputFile() {
     // if no input file, return 1
     if (this->sources.size() == 0) {
         std::cerr << "No input file" << std::endl;
