@@ -47,10 +47,13 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    // データ出力
     for (int i = 0; i < gmap.sources.size(); i++) {
         if (!gmap.sources.at(i).F_with_error) {
+            std::vector<std::string> color_list;
+            gmmc.makeColor(color_list, gmap.sources.at(i).color, gmap.sources.at(i).color2, tables.at(i).at(0).size()-1);
             for (int column = 1; column < tables.at(i).at(0).size(); column++) {
-                gmmc.writeData(texfile, tables.at(i), column, gmap.sources.at(i).color, gmap.sources.at(i).F_with_line, gmap.sources.at(i).F_with_error);
+                gmmc.writeData(texfile, tables.at(i), column, color_list.at(column-1), gmap.sources.at(i).F_with_line, gmap.sources.at(i).F_with_error);
             }
         } else {
             gmmc.writeData(texfile, tables.at(i), 1, gmap.sources.at(i).color, gmap.sources.at(i).F_with_line, gmap.sources.at(i).F_with_error);
@@ -64,8 +67,10 @@ int main(int argc, char** argv) {
             } else {
                 std::vector<std::string> title_list;
                 gmmc.makeTitle(title_list, gmap.sources.at(i).title, tables.at(i).at(0).size()-1, gmap.sources.at(i).file_name);
+                std::vector<std::string> color_list;
+                gmmc.makeColor(color_list, gmap.sources.at(i).color, gmap.sources.at(i).color2, tables.at(i).at(0).size()-1);
                 for (int column = 1; column < tables.at(i).at(0).size(); column++) {
-                    gmmc.writeLegend(texfile, title_list.at(column-1), gmap.sources.at(i).color, gmap.sources.at(i).F_with_line);
+                    gmmc.writeLegend(texfile, title_list.at(column-1), color_list.at(column-1), gmap.sources.at(i).F_with_line);
                 }
             }
         }

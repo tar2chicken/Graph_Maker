@@ -68,6 +68,13 @@ class GMMakeCode {
         /// @param file_name file name
         void makeTitle(std::vector<std::string>& title_list, std::string title, const int data_number, const std::string file_name);
 
+        /// @brief make list of colors
+        /// @param color_list list of colors
+        /// @param color first color
+        /// @param color2 second color
+        /// @param data_number the number of data
+        void makeColor(std::vector<std::string>& color_list, const std::string color, const std::string color2, const int data_number);
+
         /// @brief write code of graph legend to tex file
         /// @param texfile tex file (call by reference)
         /// @param title title of graph legend

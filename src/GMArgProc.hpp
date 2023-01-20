@@ -16,6 +16,7 @@ class GMArgProc {
             public:
                 std::string file_name;
                 std::string color;
+                std::string color2;
                 std::string title;
                 bool F_with_line;
                 bool F_with_error;

@@ -251,6 +251,72 @@ void GMMakeCode::makeTitle(std::vector<std::string>& title_list, std::string tit
     return;
 }
 
+void GMMakeCode::makeColor(std::vector<std::string>& color_list, const std::string color, const std::string color2, const int data_number) {
+    if (data_number == 1) {
+        color_list.push_back(color);
+    } else if (color2 != "") {
+        for (int i = 0; i < data_number; i++) {
+            double ratio = i * 100 / (data_number-1);
+            color_list.push_back(color2 + "!" + std::to_string(ratio) + "!" + color);
+        }
+    } else if (data_number == 2) {
+        color_list.push_back("blue");
+        color_list.push_back("red");
+    } else if (data_number == 3) {
+        color_list.push_back("blue");
+        color_list.push_back("green!50!black");
+        color_list.push_back("red");
+    } else if (data_number == 4) {
+        color_list.push_back("blue");
+        color_list.push_back("green!50!black");
+        color_list.push_back("orange");
+        color_list.push_back("red");
+    } else if (data_number == 5) {
+        color_list.push_back("blue!50!red");
+        color_list.push_back("blue");
+        color_list.push_back("green!50!black");
+        color_list.push_back("orange");
+        color_list.push_back("red");
+    } else if (data_number == 6) {
+        color_list.push_back("blue!50!red");
+        color_list.push_back("blue");
+        color_list.push_back("green!50!black");
+        color_list.push_back("yellow!50!orange");
+        color_list.push_back("orange");
+        color_list.push_back("red");
+    } else if (data_number == 7) {
+        color_list.push_back("blue!50!red");
+        color_list.push_back("blue");
+        color_list.push_back("blue!50!white");
+        color_list.push_back("green!50!black");
+        color_list.push_back("yellow!50!orange");
+        color_list.push_back("orange");
+        color_list.push_back("red");
+    } else if (data_number == 8) {
+        color_list.push_back("blue!50!red");
+        color_list.push_back("blue");
+        color_list.push_back("blue!50!white");
+        color_list.push_back("green!50!black");
+        color_list.push_back("green!50!orange");
+        color_list.push_back("yellow!50!orange");
+        color_list.push_back("orange");
+        color_list.push_back("red");
+    } else {
+        color_list.push_back("blue!50!red");
+        color_list.push_back("blue");
+        color_list.push_back("blue!50!white");
+        color_list.push_back("green!50!black");
+        color_list.push_back("green!50!orange");
+        color_list.push_back("yellow!50!orange");
+        color_list.push_back("orange");
+        color_list.push_back("red");
+        for (int i = 0; i < data_number-8; i++) {
+            color_list.push_back("black");
+        }
+    }
+    return;
+}
+
 void GMMakeCode::writeLegend(std::ofstream& texfile, std::string title, const std::string color, const bool F_with_line) {
     title = std::regex_replace(title, std::regex("_"), "\\_");
     double y_position = this->height - 0.8 - 0.6 * this->legend_count;

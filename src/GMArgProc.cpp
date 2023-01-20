@@ -6,6 +6,7 @@
 
 GMArgProc::source::source() {
     this->color = "blue";
+    this->color2 = "";
     this->F_with_line = false;
     this->F_with_error = false;
 }
@@ -119,15 +120,29 @@ int GMArgProc::getSource(int& i) {
     }
 
     // get optional properties of source
-    // [file_name]  -c  [color]  -t  [title]  -l  -e  (arguments.size)
-    //      i       i+1   i+2    i+3   i+4    i+5 i+6     i+7
+    // [file_name]  -c  [color]  -t  [title]  -l  -e  -c2  [color]  (arguments.size)
+    //      i       i+1   i+2    i+3   i+4    i+5 i+6 i+7    i+8          i+9
     int j = i;
-    while (j+1 < std::min(i+7, static_cast<int>(this->arguments.size()))) {
+    while (j+1 < std::min(i+9, static_cast<int>(this->arguments.size()))) {
         // get color, if no color, return 1
         if (this->arguments.at(j+1) == "-c") {
             j++;
             if (j+1 < (this->arguments).size()) {
                 src.color = this->arguments.at(j+1);
+                j++;
+                continue;
+            } else {
+                std::cerr << "No color" << std::endl;
+                std::cerr << "Command aborted\n" << std::endl;
+                return 1;
+            }
+        }
+
+        // get second color, if no color, return 1
+        if (this->arguments.at(j+1) == "-c2") {
+            j++;
+            if (j+1 < (this->arguments).size()) {
+                src.color2 = this->arguments.at(j+1);
                 j++;
                 continue;
             } else {
