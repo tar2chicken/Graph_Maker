@@ -57,9 +57,17 @@ int main(int argc, char** argv) {
         }
     }
 
-    if (gmap.sources.size() > 1) {
+    if (gmap.sources.size()>1 || (!gmap.sources.at(0).F_with_error && tables.at(0).at(0).size()>2)) {
         for (int i = 0; i < gmap.sources.size(); i++) {
-            gmmc.writeLegend(texfile, gmap.sources.at(i).title, gmap.sources.at(i).color, gmap.sources.at(i).F_with_line);
+            if (tables.at(i).at(0).size()==2 || gmap.sources.at(i).F_with_error) {
+                gmmc.writeLegend(texfile, gmap.sources.at(i).title, gmap.sources.at(i).color, gmap.sources.at(i).F_with_line);
+            } else {
+                std::vector<std::string> title_list;
+                gmmc.makeTitle(title_list, gmap.sources.at(i).title, tables.at(i).at(0).size()-1, gmap.sources.at(i).file_name);
+                for (int column = 1; column < tables.at(i).at(0).size(); column++) {
+                    gmmc.writeLegend(texfile, title_list.at(column-1), gmap.sources.at(i).color, gmap.sources.at(i).F_with_line);
+                }
+            }
         }
         texfile << std::endl;
     }

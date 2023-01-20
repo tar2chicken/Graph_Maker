@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <fstream>
+#include <sstream>
 #include <iostream>
 #include <regex>
 #include "GMMakeCode.hpp"
@@ -166,6 +167,87 @@ void GMMakeCode::writeData(std::ofstream& texfile, const std::vector<std::vector
         texfile << ";" << std::endl;
     }
     texfile << std::endl;
+    return;
+}
+
+void GMMakeCode::makeTitle(std::vector<std::string>& title_list, std::string title, const int data_number, const std::string file_name) {
+    if (title != "-") {
+        for (int i = 0; i < data_number; i++) {
+            title_list.push_back(title + " (" + std::to_string(i+1) + ")");
+        }
+    } else {
+        std::ifstream input_file(file_name);
+        std::string line_string;
+        while (std::getline(input_file, line_string)) {
+            char delimiter;
+            if (line_string.find(",") == std::string::npos) {
+                if (line_string.find("\t") == std::string::npos) {
+                    delimiter = ' ';
+                } else {
+                    delimiter = '\t';
+                }
+            } else {
+                delimiter = ',';
+            }
+
+            std::istringstream line_stream(line_string);
+            std::string field;
+            std::getline(line_stream, field, delimiter);
+            if (delimiter==' ' || delimiter=='\t') {
+                while (field == "") {
+                    std::getline(line_stream, field, delimiter);
+                }
+            } else if (field == "") {
+                continue;
+            }
+            field = std::regex_replace(field, std::regex(" "), "");
+            field = std::regex_replace(field, std::regex("\t"), "");
+            if (field == "-t") {
+                std::vector<std::string> line_vector;
+                bool F_empty_field = false;
+                while (std::getline(line_stream, field, delimiter)) {
+                    if ((delimiter==' ' || delimiter=='\t') && field=="") {
+                        continue;
+                    } else if (field == "") {
+                        F_empty_field = true;
+                        break;
+                    }
+
+                    // Remove space and tab before and after field
+                    std::regex s1("^ ");
+                    std::regex s2(" $");
+                    std::regex t1("^\t");
+                    std::regex t2("\t$");
+                    while (std::regex_search(field, s1) || std::regex_search(field, s2) || std::regex_search(field, t1) || std::regex_search(field, t2)) {
+                        field = std::regex_replace(field, s1, "");
+                        field = std::regex_replace(field, s2, "");
+                        field = std::regex_replace(field, t1, "");
+                        field = std::regex_replace(field, t2, "");
+                    }
+
+                    line_vector.push_back(field);
+                }
+
+                if (!F_empty_field && line_vector.size()==data_number) {
+                    for (int i = 0; i < data_number; i++) {
+                        title_list.push_back(line_vector.at(i));
+                    }
+                }
+            } else {
+                continue;
+            }
+        }
+
+        if (title_list.size() == 0) {
+            title = file_name;
+            if (title.rfind(".") != std::string::npos) {
+                title.erase(title.rfind("."));
+            }
+            for (int i = 0; i < data_number; i++) {
+                title_list.push_back(title + " (" + std::to_string(i+1) + ")");
+            }
+        }
+    }
     return;
 }
 

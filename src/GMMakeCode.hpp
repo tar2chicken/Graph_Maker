@@ -61,6 +61,13 @@ class GMMakeCode {
         /// @param F_with_error flag of with_error
         void writeData(std::ofstream& texfile, const std::vector<std::vector<double>>& table, const int column, const std::string color, const bool F_with_line, const bool F_with_error);
 
+        /// @brief make list of titles
+        /// @param title_list list of titles (call by reference)
+        /// @param title title entered on command line
+        /// @param data_number the number of data
+        /// @param file_name file name
+        void makeTitle(std::vector<std::string>& title_list, std::string title, const int data_number, const std::string file_name);
+
         /// @brief write code of graph legend to tex file
         /// @param texfile tex file (call by reference)
         /// @param title title of graph legend
