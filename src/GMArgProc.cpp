@@ -25,6 +25,8 @@ GMArgProc::GMArgProc() {
     this->F_ymin = false;
     this->F_ymax = false;
     this->F_tex = false;
+    this->F_logx = false;
+    this->F_logy = false;
 
     this->texname = "";
     this->dviname = "";
@@ -291,6 +293,18 @@ int GMArgProc::getOption(int& i) {
     // get flag of tex file output
     if (this->arguments.at(i) == "-tex") {
         this->F_tex = true;
+        return 0;
+    }
+
+    // get flag of log plot of x axis
+    if (this->arguments.at(i) == "-logx") {
+        this->F_logx = true;
+        return 0;
+    }
+
+    // get flag of log plot of y axis
+    if (this->arguments.at(i) == "-logy") {
+        this->F_logy = true;
         return 0;
     }
 

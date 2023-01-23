@@ -53,6 +53,10 @@ class GMArgProc {
         bool F_ymax;
         /// @brief flag of tex file output
         bool F_tex;
+        /// @brief flag of log plot of x axis
+        bool F_logx;
+        /// @brief flag of log plot of y axis
+        bool F_logy;
 
         std::string texname;
         std::string dviname;

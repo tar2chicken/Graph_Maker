@@ -49,8 +49,10 @@ class GMMakeCode {
 
         /// @brief write code of scale to tex file
         /// @param texfile tex file (call by reference)
+        /// @param F_logx flag of log plot of x axis
+        /// @param F_logy flag of log plot of y axis
         /// @return 0:OK, 1:ERROR
-        int writeScale(std::ofstream& texfile);
+        int writeScale(std::ofstream& texfile, const bool F_logx, const bool F_logy);
 
         /// @brief write code of plot to tex file
         /// @param texfile tex file (call by reference)

@@ -30,6 +30,44 @@ int main(int argc, char** argv) {
     for (int i = 0; i < gmap.sources.size(); i++) {
         std::vector<std::vector<double>> table;
         ftt.numeric(gmap.sources.at(i).file_name, table);
+
+        if (gmap.F_logx) {
+            for (int j = 0; j < table.size(); j++) {
+                while (table.at(j).at(0) <= 0) {
+                    table.erase(table.begin()+j);
+                    if (j == table.size()) {
+                        break;
+                    }
+                }
+                if (j < table.size()){
+                    table.at(j).at(0) = std::log10(table.at(j).at(0));
+                }
+            }
+        }
+
+        if (gmap.F_logy) {
+            for (int j = 0; j < table.size(); j++) {
+                for (int column = 1; column < table.at(j).size(); column++) {
+                    while (table.at(j).at(column) <= 0) {
+                        table.erase(table.begin()+j);
+                        if (j == table.size()) {
+                            break;
+                        }
+                    }
+                    if (j < table.size()){
+                        table.at(j).at(column) = std::log10(table.at(j).at(column));
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (table.size()<2) {
+            std::cerr << "Data cannot be graphed" << std::endl;
+            std::cerr << "Command aborted\n" << std::endl;
+            return 1;
+        }
         tables.push_back(table);
     }
 
@@ -42,7 +80,7 @@ int main(int argc, char** argv) {
     // output tex source code
     std::ofstream texfile(gmap.texname);
     gmmc.writePreamble(texfile);
-    error_code = gmmc.writeScale(texfile);
+    error_code = gmmc.writeScale(texfile, gmap.F_logx, gmap.F_logy);
     if (error_code == 1) {
         return 1;
     }

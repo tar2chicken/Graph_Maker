@@ -93,7 +93,7 @@ void GMMakeCode::writePreamble(std::ofstream& texfile) {
     return;
 }
 
-int GMMakeCode::writeScale(std::ofstream& texfile) {
+int GMMakeCode::writeScale(std::ofstream& texfile, const bool F_logx, const bool F_logy) {
     // set dx
     this->dx = this->scale(this->xmin, this->xmax);
     if (this->dx < 0) {
@@ -104,7 +104,11 @@ int GMMakeCode::writeScale(std::ofstream& texfile) {
     // write x-axis scale
     for (int i = 0; i < xscale_count; i++) {
         double x = (std::ceil(this->xmin / this->dx) + i) * this->dx;
-        texfile << "    \\node[below] at (" << this->xPosition(x) << ", 0) {" << x << "};" << std::endl;
+        if (!F_logx) {
+            texfile << "    \\node[below] at (" << this->xPosition(x) << ", 0) {" << x << "};" << std::endl;
+        } else {
+            texfile << "    \\node[below] at (" << this->xPosition(x) << ", 0) {$10^{" << x << "}$};" << std::endl;
+        }
         texfile << "    \\draw[thick] (" << this->xPosition(x) << ", 0) -- (" << this->xPosition(x) << ", 0.2);" << std::endl;
         texfile << "    \\draw[thick] (" << this->xPosition(x) << ", " << this->height << ") -- (" << this->xPosition(x) << ", " << this->height - 0.2 << ");" << std::endl;
     }
@@ -120,7 +124,11 @@ int GMMakeCode::writeScale(std::ofstream& texfile) {
     // write x-axis scale
     for (int i = 0; i < yscale_count; i++) {
         double y = (std::ceil(this->ymin / this->dy) + i) * this->dy;
-        texfile << "    \\node[left] at (0, " << this->yPosition(y) << ") {" << y << "};" << std::endl;
+        if (!F_logy) {
+            texfile << "    \\node[left] at (0, " << this->yPosition(y) << ") {" << y << "};" << std::endl;
+        } else {
+            texfile << "    \\node[left] at (0, " << this->yPosition(y) << ") {$10^{" << y << "}$};" << std::endl;
+        }
         texfile << "    \\draw[thick] (0, " << this->yPosition(y) << ") -- (0.2, " << this->yPosition(y) << ");" << std::endl;
         texfile << "    \\draw[thick] (" << this->width << ", " << this->yPosition(y) << ") -- (" << this->width - 0.2 << ", " << this->yPosition(y) << ");" << std::endl;
     }
