@@ -21,10 +21,8 @@ class GMArgProc {
 
                 /// @brief flag of option to connect data points with lines
                 bool F_with_line;
-
                 /// @brief flag of error bar
                 bool F_with_error;
-
                 /// @brief flag of linear regression
                 bool F_with_linear;
 
@@ -64,6 +62,8 @@ class GMArgProc {
         bool F_logx;
         /// @brief flag of log plot of y axis
         bool F_logy;
+        /// @brief flag of left graph legend
+        bool F_left;
 
         std::string texname;
         std::string dviname;

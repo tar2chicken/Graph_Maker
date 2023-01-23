@@ -102,14 +102,14 @@ int main(int argc, char** argv) {
     if (gmap.sources.size()>1 || (!gmap.sources.at(0).F_with_error && tables.at(0).at(0).size()>2)) {
         for (int i = 0; i < gmap.sources.size(); i++) {
             if (tables.at(i).at(0).size()==2 || gmap.sources.at(i).F_with_error) {
-                gmmc.writeLegend(texfile, gmap.sources.at(i).title, gmap.sources.at(i).color, gmap.sources.at(i).F_with_line);
+                gmmc.writeLegend(texfile, gmap.sources.at(i).title, gmap.sources.at(i).color, gmap.sources.at(i).F_with_line, gmap.F_left);
             } else {
                 std::vector<std::string> title_list;
                 gmmc.makeTitle(title_list, gmap.sources.at(i).title, tables.at(i).at(0).size()-1, gmap.sources.at(i).file_name);
                 std::vector<std::string> color_list;
                 gmmc.makeColor(color_list, gmap.sources.at(i).color, gmap.sources.at(i).color2, tables.at(i).at(0).size()-1);
                 for (int column = 1; column < tables.at(i).at(0).size(); column++) {
-                    gmmc.writeLegend(texfile, title_list.at(column-1), color_list.at(column-1), gmap.sources.at(i).F_with_line);
+                    gmmc.writeLegend(texfile, title_list.at(column-1), color_list.at(column-1), gmap.sources.at(i).F_with_line, gmap.F_left);
                 }
             }
         }
@@ -118,7 +118,7 @@ int main(int argc, char** argv) {
         if (gmap.sources.at(i).F_with_linear) {
             std::string title = gmmc.makeFormula(tables.at(i), gmap.F_logx, gmap.F_logy);
             std::string color = gmap.sources.at(i).color + "!50!white";
-            gmmc.writeLegend(texfile, title, color, true);
+            gmmc.writeLegend(texfile, title, color, true, gmap.F_left);
         }
     }
     texfile << std::endl;

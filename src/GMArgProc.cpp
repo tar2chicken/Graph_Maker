@@ -28,6 +28,7 @@ GMArgProc::GMArgProc() {
     this->F_tex = false;
     this->F_logx = false;
     this->F_logy = false;
+    this->F_left = false;
 
     this->texname = "";
     this->dviname = "";
@@ -123,10 +124,10 @@ int GMArgProc::getSource(int& i) {
     }
 
     // get optional properties of source
-    // [file_name]  -c  [color]  -t  [title]  -l  -e  -c2  [color]  (arguments.size)
-    //      i       i+1   i+2    i+3   i+4    i+5 i+6 i+7    i+8          i+9
+    // [file_name]  -c  [color]  -t  [title]  -l  -e  -c2  [color]  -linear  (arguments.size)
+    //      i       i+1   i+2    i+3   i+4    i+5 i+6 i+7    i+8      i+9         i+10
     int j = i;
-    while (j+1 < std::min(i+9, static_cast<int>(this->arguments.size()))) {
+    while (j+1 < std::min(i+10, static_cast<int>(this->arguments.size()))) {
         // get color, if no color, return 1
         if (this->arguments.at(j+1) == "-c") {
             j++;
@@ -313,6 +314,12 @@ int GMArgProc::getOption(int& i) {
     // get flag of log plot of y axis
     if (this->arguments.at(i) == "-logy") {
         this->F_logy = true;
+        return 0;
+    }
+
+    // get flag of left graph legend
+    if (this->arguments.at(i) == "-left") {
+        this->F_left = true;
         return 0;
     }
 

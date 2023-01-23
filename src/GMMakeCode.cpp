@@ -384,14 +384,23 @@ std::string GMMakeCode::makeFormula(std::vector<std::vector<double>>& table, con
     return title.str();
 }
 
-void GMMakeCode::writeLegend(std::ofstream& texfile, std::string title, const std::string color, const bool F_with_line) {
+void GMMakeCode::writeLegend(std::ofstream& texfile, std::string title, const std::string color, const bool F_with_line, const bool F_left) {
     title = std::regex_replace(title, std::regex("_"), "\\_");
     double y_position = this->height - 0.8 - 0.6 * this->legend_count;
-    texfile << "    \\node[left] at (" << this->width - 1.4 << ", " << y_position << ") {" << title << "};" << std::endl;
-    if (!F_with_line) {
-        texfile << "    \\fill[" << color << "] (" << this->width - 1 << ", " << y_position << ") circle [radius=1pt];" << std::endl;
+    if (!F_left) {
+        texfile << "    \\node[left] at (" << this->width - 1.4 << ", " << y_position << ") {" << title << "};" << std::endl;
+        if (!F_with_line) {
+            texfile << "    \\fill[" << color << "] (" << this->width - 1 << ", " << y_position << ") circle [radius=1pt];" << std::endl;
+        } else {
+            texfile << "    \\draw[" << color << ", line width=1pt] (" << this->width - 1.2 << ", " << y_position << ") -- (" << this->width - 0.8 << ", " << y_position << ");" << std::endl;
+        }
     } else {
-        texfile << "    \\draw[" << color << ", line width=1pt] (" << this->width - 1.2 << ", " << y_position << ") -- (" << this->width - 0.8 << ", " << y_position << ");" << std::endl;
+        texfile << "    \\node[right] at (" << 1.4 << ", " << y_position << ") {" << title << "};" << std::endl;
+        if (!F_with_line) {
+            texfile << "    \\fill[" << color << "] (" << 1 << ", " << y_position << ") circle [radius=1pt];" << std::endl;
+        } else {
+            texfile << "    \\draw[" << color << ", line width=1pt] (" << 0.8 << ", " << y_position << ") -- (" << 1.2 << ", " << y_position << ");" << std::endl;
+        }
     }
     this->legend_count++;
     return;

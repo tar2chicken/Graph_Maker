@@ -90,7 +90,8 @@ class GMMakeCode {
         /// @param title title of graph legend
         /// @param color color
         /// @param F_with_line flag of with_line
-        void writeLegend(std::ofstream& texfile, std::string title, const std::string color, const bool F_with_line);
+        /// @param F_left flag of left graph legend
+        void writeLegend(std::ofstream& texfile, std::string title, const std::string color, const bool F_with_line, const bool F_left);
 
         /// @brief write code of frame and x, y label to tex file
         /// @param texfile tex file (call by reference)
