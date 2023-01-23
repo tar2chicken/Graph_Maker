@@ -9,6 +9,7 @@ GMArgProc::source::source() {
     this->color2 = "";
     this->F_with_line = false;
     this->F_with_error = false;
+    this->F_with_linear = false;
 }
 
 GMArgProc::GMArgProc() {
@@ -178,6 +179,13 @@ int GMArgProc::getSource(int& i) {
         // get with_error
         if (this->arguments.at(j+1) == "-e") {
             src.F_with_error = true;
+            j++;
+            continue;
+        }
+
+        // get with_linear
+        if (this->arguments.at(j+1) == "-linear") {
+            src.F_with_linear = true;
             j++;
             continue;
         }

@@ -59,9 +59,10 @@ class GMMakeCode {
         /// @param table table (call by reference)
         /// @param column column
         /// @param color color
-        /// @param F_with_line flag of with_line
-        /// @param F_with_error flag of with_error
-        void writeData(std::ofstream& texfile, const std::vector<std::vector<double>>& table, const int column, const std::string color, const bool F_with_line, const bool F_with_error);
+        /// @param F_with_line flag of option to connect data points with lines
+        /// @param F_with_error flag of error bar
+        /// @param F_with_linear flag of linear regression
+        void writeData(std::ofstream& texfile, const std::vector<std::vector<double>>& table, const int column, const std::string color, const bool F_with_line, const bool F_with_error, const bool F_with_linear);
 
         /// @brief make list of titles
         /// @param title_list list of titles (call by reference)
@@ -76,6 +77,13 @@ class GMMakeCode {
         /// @param color2 second color
         /// @param data_number the number of data
         void makeColor(std::vector<std::string>& color_list, const std::string color, const std::string color2, const int data_number);
+
+        /// @brief output formula of regression line
+        /// @param table data (call by reference)
+        /// @param F_logx flag of log plot of x axis
+        /// @param F_logy flag of log plot of y axis
+        /// @return formula of regression line
+        std::string makeFormula(std::vector<std::vector<double>>& table, const bool F_logx, const bool F_logy);
 
         /// @brief write code of graph legend to tex file
         /// @param texfile tex file (call by reference)
@@ -106,6 +114,13 @@ class GMMakeCode {
         /// @param y value of y
         /// @return y-coordinate of tikz
         double yPosition(const double y);
+
+        /// @brief linear regression of data
+        /// @param table data (call by reference)
+        /// @param column column
+        /// @param a slope (call by reference)
+        /// @param b intercept (call by reference)
+        void linearRegression(const std::vector<std::vector<double>>& table, const int column, double& a, double& b);
 };
 
 #endif

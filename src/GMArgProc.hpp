@@ -18,8 +18,15 @@ class GMArgProc {
                 std::string color;
                 std::string color2;
                 std::string title;
+
+                /// @brief flag of option to connect data points with lines
                 bool F_with_line;
+
+                /// @brief flag of error bar
                 bool F_with_error;
+
+                /// @brief flag of linear regression
+                bool F_with_linear;
 
                 /// @brief constructor
                 source();

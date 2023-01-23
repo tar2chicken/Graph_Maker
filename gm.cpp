@@ -85,19 +85,20 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    // データ出力
+    // output data
     for (int i = 0; i < gmap.sources.size(); i++) {
-        if (!gmap.sources.at(i).F_with_error) {
+        if (!gmap.sources.at(i).F_with_error && !gmap.sources.at(i).F_with_linear) {
             std::vector<std::string> color_list;
             gmmc.makeColor(color_list, gmap.sources.at(i).color, gmap.sources.at(i).color2, tables.at(i).at(0).size()-1);
             for (int column = 1; column < tables.at(i).at(0).size(); column++) {
-                gmmc.writeData(texfile, tables.at(i), column, color_list.at(column-1), gmap.sources.at(i).F_with_line, gmap.sources.at(i).F_with_error);
+                gmmc.writeData(texfile, tables.at(i), column, color_list.at(column-1), gmap.sources.at(i).F_with_line, gmap.sources.at(i).F_with_error, gmap.sources.at(i).F_with_linear);
             }
         } else {
-            gmmc.writeData(texfile, tables.at(i), 1, gmap.sources.at(i).color, gmap.sources.at(i).F_with_line, gmap.sources.at(i).F_with_error);
+            gmmc.writeData(texfile, tables.at(i), 1, gmap.sources.at(i).color, gmap.sources.at(i).F_with_line, gmap.sources.at(i).F_with_error, gmap.sources.at(i).F_with_linear);
         }
     }
 
+    // output graph legend
     if (gmap.sources.size()>1 || (!gmap.sources.at(0).F_with_error && tables.at(0).at(0).size()>2)) {
         for (int i = 0; i < gmap.sources.size(); i++) {
             if (tables.at(i).at(0).size()==2 || gmap.sources.at(i).F_with_error) {
@@ -112,8 +113,15 @@ int main(int argc, char** argv) {
                 }
             }
         }
-        texfile << std::endl;
     }
+    for (int i = 0; i < gmap.sources.size(); i++) {
+        if (gmap.sources.at(i).F_with_linear) {
+            std::string title = gmmc.makeFormula(tables.at(i), gmap.F_logx, gmap.F_logy);
+            std::string color = gmap.sources.at(i).color + "!50!white";
+            gmmc.writeLegend(texfile, title, color, true);
+        }
+    }
+    texfile << std::endl;
     gmmc.writeFrame(texfile, gmap.xlabel, gmap.ylabel);
     texfile.close();
 

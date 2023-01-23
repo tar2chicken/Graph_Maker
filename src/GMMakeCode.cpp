@@ -3,8 +3,9 @@
 #include <algorithm>
 #include <cmath>
 #include <fstream>
-#include <sstream>
+#include <iomanip>
 #include <iostream>
+#include <sstream>
 #include <regex>
 #include "GMMakeCode.hpp"
 
@@ -137,7 +138,26 @@ int GMMakeCode::writeScale(std::ofstream& texfile, const bool F_logx, const bool
     return 0;
 }
 
-void GMMakeCode::writeData(std::ofstream& texfile, const std::vector<std::vector<double>>& table, const int column, const std::string color, const bool F_with_line, const bool F_with_error) {
+void GMMakeCode::writeData(std::ofstream& texfile, const std::vector<std::vector<double>>& table, const int column, const std::string color, const bool F_with_line, const bool F_with_error, const bool F_with_linear) {
+    if (F_with_linear) {
+        double a, b;
+        this->linearRegression(table, column, a, b);
+        if ((a*this->xmin+b)>=(this->ymin) && (a*this->xmin+b)<=(this->ymax)) {
+            if ((a*this->xmax+b) < (this->ymin)) {
+                texfile << "    \\draw[" << color << "!50!white, line width=1pt] (" << this->xPosition(this->xmin) << ", " << this->yPosition(a*this->xmin+b) << ") -- (" << this->xPosition((this->ymin-b)/a) << ", " << this->yPosition(this->ymin) << ");" << std::endl;
+            } else if ((a*this->xmax+b) > (this->ymax)) {
+                texfile << "    \\draw[" << color << "!50!white, line width=1pt] (" << this->xPosition(this->xmin) << ", " << this->yPosition(a*this->xmin+b) << ") -- (" << this->xPosition((this->ymax-b)/a) << ", " << this->yPosition(this->ymax) << ");" << std::endl;
+            } else {
+                texfile << "    \\draw[" << color << "!50!white, line width=1pt] (" << this->xPosition(this->xmin) << ", " << this->yPosition(a*this->xmin+b) << ") -- (" << this->xPosition(this->xmax) << ", " << this->yPosition(a*this->xmax+b) << ");" << std::endl;
+            }
+        } else if ((a*this->xmin+b)<(this->ymin) && (a*this->xmax+b)<=(this->ymax)) {
+            texfile << "    \\draw[" << color << "!50!white, line width=1pt] (" << this->xPosition((this->ymin-b)/a) << ", " << this->yPosition(this->ymin) << ") -- (" << this->xPosition(this->xmax) << ", " << this->yPosition(a*this->xmax+b) << ");" << std::endl;
+        } else if ((a*this->xmin+b)>(this->ymax) && (a*this->xmax+b)>=(this->ymin)) {
+            texfile << "    \\draw[" << color << "!50!white, line width=1pt] (" << this->xPosition((this->ymax-b)/a) << ", " << this->yPosition(this->ymax) << ") -- (" << this->xPosition(this->xmax) << ", " << this->yPosition(a*this->xmax+b) << ");" << std::endl;
+        } else {
+            texfile << "    \\draw[" << color << "!50!white, line width=1pt] (" << this->xPosition((this->ymin-b)/a) << ", " << this->yPosition(this->ymin) << ") -- (" << this->xPosition((this->ymax-b)/a) << ", " << this->yPosition(this->ymax) << ");" << std::endl;
+        }
+    }
     if (F_with_error) {
         for (int i = 0; i < table.size(); i++) {
             if ((table.at(i).at(0)>(this->xmin)) && (table.at(i).at(0)<(this->xmax)) && (table.at(i).at(column)>(this->ymin)) && (table.at(i).at(column)<(this->ymax)) && (column+1 < table.at(i).size())) {
@@ -325,6 +345,45 @@ void GMMakeCode::makeColor(std::vector<std::string>& color_list, const std::stri
     return;
 }
 
+std::string GMMakeCode::makeFormula(std::vector<std::vector<double>>& table, const bool F_logx, const bool F_logy) {
+    double a, b;
+    this->linearRegression(table, 1, a, b);
+    std::ostringstream title;
+    title << std::setprecision(4);
+    if (!F_logx && !F_logy) {
+        if (b > 0) {
+            title << "$ y = " << a << "x + " << b << " $";
+        } else if (b == 0) {
+            title << "$ y = " << a << "x $";
+        } else {
+            title << "$ y = " << a << "x " << b << " $";
+        }
+    } else if (!F_logx) {
+        if (b > 0) {
+            title << "$ y = \\exp (" << a * std::log(10) << "x + " << b * std::log(10) << ") $";
+        } else if (b == 0) {
+            title << "$ y = \\exp (" << a * std::log(10) << "x) $";
+        } else {
+            title << "$ y = \\exp (" << a * std::log(10) << "x " << b * std::log(10) << ") $";
+        }
+    } else if (!F_logy) {
+        if (b > 0) {
+            title << "$ y = " << a / std::log(10) << " \\log x + " << b << " $";
+        } else if (b == 0) {
+            title << "$ y = " << a / std::log(10) << " \\log x $";
+        } else {
+            title << "$ y = " << a / std::log(10) << " \\log x " << b << " $";
+        }
+    } else {
+        if (b != 0) {
+            title << "$ y = x^{" << a << "} 10^{" << b << "} $";
+        } else {
+            title << "$ y = x^{" << a << "} $";
+        }
+    }
+    return title.str();
+}
+
 void GMMakeCode::writeLegend(std::ofstream& texfile, std::string title, const std::string color, const bool F_with_line) {
     title = std::regex_replace(title, std::regex("_"), "\\_");
     double y_position = this->height - 0.8 - 0.6 * this->legend_count;
@@ -394,4 +453,21 @@ double GMMakeCode::xPosition(const double x) {
 
 double GMMakeCode::yPosition(const double y) {
     return (this->height * (y - this->ymin) / (this->ymax - this->ymin));
+}
+
+void GMMakeCode::linearRegression(const std::vector<std::vector<double>>& table, const int column, double& a, double& b) {
+    double X = 0;
+    double Y = 0;
+    double X2 = 0;
+    double XY = 0;
+    int N = table.size();
+    for (int i = 0; i < table.size(); i++) {
+        X += table.at(i).at(0);
+        Y += table.at(i).at(column);
+        X2 += std::pow(table.at(i).at(0), 2);
+        XY += table.at(i).at(0)*table.at(i).at(column);
+    }
+    a = (N*XY - X*Y) / (N*X2 - std::pow(X, 2));
+    b = (X2*Y - XY*X) / (N*X2 - std::pow(X, 2));
+    return;
 }
