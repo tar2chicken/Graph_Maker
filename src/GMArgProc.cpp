@@ -16,10 +16,10 @@ GMArgProc::GMArgProc() {
     this->ofname = "";
     this->xlabel = "";
     this->ylabel = "";
-    this->xmin = 0;
-    this->xmax = 0;
-    this->ymin = 0;
-    this->ymax = 0;
+    this->xmin = 1;
+    this->xmax = 1;
+    this->ymin = 1;
+    this->ymax = 1;
 
     this->F_xmin = false;
     this->F_xmax = false;

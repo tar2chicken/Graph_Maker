@@ -33,7 +33,8 @@ class GMMakeCode {
         /// @param F_xmax flag indicating that xmax is entered
         /// @param xmax_entered entered xmax
         /// @param extension extension ratio
-        void resetXMinMax(const bool F_xmin, const double xmin_entered, const bool F_xmax, const double xmax_entered, const double extension);
+        /// @param F_logx flag of log plot of x axis
+        void resetXMinMax(const bool F_xmin, double xmin_entered, const bool F_xmax, double xmax_entered, const double extension, const bool F_logx);
 
         /// @brief reset minimum and maximum values of y-axis
         /// @param F_ymin flag indicating that ymin is entered
@@ -41,7 +42,8 @@ class GMMakeCode {
         /// @param F_ymax flag indicating that ymax is entered
         /// @param ymax_entered entered ymax
         /// @param extension extension ratio
-        void resetYMinMax(const bool F_ymin, const double ymin_entered, const bool F_ymax, const double ymax_entered, const double extension);
+        /// @param F_logy flag of log plot of y axis
+        void resetYMinMax(const bool F_ymin, double ymin_entered, const bool F_ymax, double ymax_entered, const double extension, const bool F_logy);
 
         /// @brief write preamble code to tex file
         /// @param texfile tex file (call by reference)

@@ -75,8 +75,8 @@ int main(int argc, char** argv) {
     GMMakeCode gmmc;
     // get minimum and maximum values of each axis
     gmmc.getMinMax(tables);
-    gmmc.resetXMinMax(gmap.F_xmin, gmap.xmin, gmap.F_xmax, gmap.xmax, 1.05);
-    gmmc.resetYMinMax(gmap.F_ymin, gmap.ymin, gmap.F_ymax, gmap.ymax, 1.1);
+    gmmc.resetXMinMax(gmap.F_xmin, gmap.xmin, gmap.F_xmax, gmap.xmax, 1.05, gmap.F_logx);
+    gmmc.resetYMinMax(gmap.F_ymin, gmap.ymin, gmap.F_ymax, gmap.ymax, 1.1, gmap.F_logy);
     // output tex source code
     std::ofstream texfile(gmap.texname);
     gmmc.writePreamble(texfile);

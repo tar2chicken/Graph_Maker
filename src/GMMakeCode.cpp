@@ -56,7 +56,11 @@ void GMMakeCode::getMinMax(const std::vector<std::vector<std::vector<double>>>& 
     return;
 }
 
-void GMMakeCode::resetXMinMax(const bool F_xmin, const double xmin_entered, const bool F_xmax, const double xmax_entered, const double extension) {
+void GMMakeCode::resetXMinMax(const bool F_xmin, double xmin_entered, const bool F_xmax, double xmax_entered, const double extension, const bool F_logx) {
+    if (F_logx) {
+        xmin_entered = std::log10(xmin_entered);
+        xmax_entered = std::log10(xmax_entered);
+    }
     if (F_xmin) {
         this->xmin = xmin_entered;
     }
@@ -68,7 +72,11 @@ void GMMakeCode::resetXMinMax(const bool F_xmin, const double xmin_entered, cons
     return;
 }
 
-void GMMakeCode::resetYMinMax(const bool F_ymin, const double ymin_entered, const bool F_ymax, const double ymax_entered, const double extension) {
+void GMMakeCode::resetYMinMax(const bool F_ymin, double ymin_entered, const bool F_ymax, double ymax_entered, const double extension, const bool F_logy) {
+    if (F_logy) {
+        ymin_entered = std::log10(ymin_entered);
+        ymax_entered = std::log10(ymax_entered);
+    }
     if (F_ymin) {
         this->ymin = ymin_entered;
     }
