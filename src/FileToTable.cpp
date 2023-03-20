@@ -67,7 +67,7 @@ void FileToTable::numeric(const std::string ifname, std::vector<std::vector<doub
                 F_first_line = false;
                 column_number = line_vector.size();
                 table.push_back(line_vector);
-            } else if (line_vector.size() == column_number) {
+            } else if (static_cast<int>(line_vector.size()) == column_number) {
                 // if the number of elements in 1-line vector is equal to the number of columns
                 table.push_back(line_vector);
             }

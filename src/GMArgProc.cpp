@@ -61,7 +61,7 @@ int GMArgProc::process() {
 
     // processing when making graph
     int error_code = 0;
-    for (int i = 0; i < (this->arguments).size(); i++) {
+    for (int i = 0; i < static_cast<int>((this->arguments).size()); i++) {
         // get option
         error_code = this->getOption(i);
         if (error_code == 0) {
@@ -127,11 +127,12 @@ int GMArgProc::getSource(int& i) {
     // [file_name]  -c  [color]  -t  [title]  -l  -e  -c2  [color]  -linear  (arguments.size)
     //      i       i+1   i+2    i+3   i+4    i+5 i+6 i+7    i+8      i+9         i+10
     int j = i;
-    while (j+1 < std::min(i+10, static_cast<int>(this->arguments.size()))) {
+    int arg_size = static_cast<int>(this->arguments.size());
+    while (j+1 < std::min(i+10, arg_size)) {
         // get color, if no color, return 1
         if (this->arguments.at(j+1) == "-c") {
             j++;
-            if (j+1 < (this->arguments).size()) {
+            if (j+1 < arg_size) {
                 src.color = this->arguments.at(j+1);
                 j++;
                 continue;
@@ -145,7 +146,7 @@ int GMArgProc::getSource(int& i) {
         // get second color, if no color, return 1
         if (this->arguments.at(j+1) == "-c2") {
             j++;
-            if (j+1 < (this->arguments).size()) {
+            if (j+1 < arg_size) {
                 src.color2 = this->arguments.at(j+1);
                 j++;
                 continue;
@@ -159,7 +160,7 @@ int GMArgProc::getSource(int& i) {
         // get title, if no title, return 1
         if (this->arguments.at(j+1) == "-t") {
             j++;
-            if (j+1 < (this->arguments).size()) {
+            if (j+1 < arg_size) {
                 src.title = this->arguments.at(j+1);
                 j++;
                 continue;
@@ -204,9 +205,10 @@ int GMArgProc::getSource(int& i) {
 }
 
 int GMArgProc::getOption(int& i) {
+    int arg_size = static_cast<int>(this->arguments.size());
     // get output file name, if no file name, return 1
     if (this->arguments.at(i) == "-o") {
-        if (i+1 < (this->arguments).size()) {
+        if (i+1 < arg_size) {
             this->ofname = this->arguments.at(i+1);
             i++;
             return 0;
@@ -219,7 +221,7 @@ int GMArgProc::getOption(int& i) {
 
     // get x-axis label, if no label, return 1
     if (this->arguments.at(i) == "-x") {
-        if (i+1 < (this->arguments).size()) {
+        if (i+1 < arg_size) {
             this->xlabel = this->arguments.at(i+1);
             i++;
             return 0;
@@ -232,7 +234,7 @@ int GMArgProc::getOption(int& i) {
 
     // get y-axis label, if no label, return 1
     if (this->arguments.at(i) == "-y") {
-        if (i+1 < (this->arguments).size()) {
+        if (i+1 < arg_size) {
             this->ylabel = this->arguments.at(i+1);
             i++;
             return 0;
@@ -245,7 +247,7 @@ int GMArgProc::getOption(int& i) {
 
     // get minimum value of x-axis, if no value, return 1
     if (this->arguments.at(i) == "-xmin") {
-        if (i+1 < (this->arguments).size()) {
+        if (i+1 < arg_size) {
             this->xmin = std::stod(this->arguments.at(i+1));
             this->F_xmin = true;
             i++;
@@ -259,7 +261,7 @@ int GMArgProc::getOption(int& i) {
 
     // get maximum value of x-axis, if no value, return 1
     if (this->arguments.at(i) == "-xmax") {
-        if (i+1 < (this->arguments).size()) {
+        if (i+1 < arg_size) {
             this->xmax = std::stod(this->arguments.at(i+1));
             this->F_xmax = true;
             i++;
@@ -273,7 +275,7 @@ int GMArgProc::getOption(int& i) {
 
     // get minimum value of y-axis, if no value, return 1
     if (this->arguments.at(i) == "-ymin") {
-        if (i+1 < (this->arguments).size()) {
+        if (i+1 < arg_size) {
             this->ymin = std::stod(this->arguments.at(i+1));
             this->F_ymin = true;
             i++;
@@ -287,7 +289,7 @@ int GMArgProc::getOption(int& i) {
 
     // get maximum value of y-axis, if no value, return 1
     if (this->arguments.at(i) == "-ymax") {
-        if (i+1 < (this->arguments).size()) {
+        if (i+1 < arg_size) {
             this->ymax = std::stod(this->arguments.at(i+1));
             this->F_ymax = true;
             i++;

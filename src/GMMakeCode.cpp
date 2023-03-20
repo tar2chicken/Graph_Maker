@@ -24,10 +24,10 @@ GMMakeCode::GMMakeCode() {
 }
 
 void GMMakeCode::getMinMax(const std::vector<std::vector<std::vector<double>>>& tables) {
-    for (int i = 0; i < tables.size(); i++) {
+    for (int i = 0; i < static_cast<int>(tables.size()); i++) {
         // get xmin and xmax
         std::vector<double> x;
-        for (int j = 0; j < tables.at(i).size(); j++) {
+        for (int j = 0; j < static_cast<int>(tables.at(i).size()); j++) {
             x.push_back(tables.at(i).at(j).at(0));
         }
         if (i == 0) {
@@ -39,9 +39,9 @@ void GMMakeCode::getMinMax(const std::vector<std::vector<std::vector<double>>>& 
         }
 
         // get ymin and ymax
-        for (int k = 1; k < tables.at(i).at(0).size(); k++) {
+        for (int k = 1; k < static_cast<int>(tables.at(i).at(0).size()); k++) {
             std::vector<double> y;
-            for (int j = 0; j < tables.at(i).size(); j++) {
+            for (int j = 0; j < static_cast<int>(tables.at(i).size()); j++) {
                 y.push_back(tables.at(i).at(j).at(k));
             }
             if (i==0 && k==1) {
@@ -167,8 +167,8 @@ void GMMakeCode::writeData(std::ofstream& texfile, const std::vector<std::vector
         }
     }
     if (F_with_error) {
-        for (int i = 0; i < table.size(); i++) {
-            if ((table.at(i).at(0)>(this->xmin)) && (table.at(i).at(0)<(this->xmax)) && (table.at(i).at(column)>(this->ymin)) && (table.at(i).at(column)<(this->ymax)) && (column+1 < table.at(i).size())) {
+        for (int i = 0; i < static_cast<int>(table.size()); i++) {
+            if ((table.at(i).at(0)>(this->xmin)) && (table.at(i).at(0)<(this->xmax)) && (table.at(i).at(column)>(this->ymin)) && (table.at(i).at(column)<(this->ymax)) && (column+1 < static_cast<int>(table.at(i).size()))) {
                 double x = table.at(i).at(0);
                 double y = table.at(i).at(column);
                 double ey = table.at(i).at(column+1);
@@ -179,7 +179,7 @@ void GMMakeCode::writeData(std::ofstream& texfile, const std::vector<std::vector
         }
     }
     if (!F_with_line) {
-        for (int i = 0; i < table.size(); i++) {
+        for (int i = 0; i < static_cast<int>(table.size()); i++) {
             if ((table.at(i).at(0)>(this->xmin)) && (table.at(i).at(0)<(this->xmax)) && (table.at(i).at(column)>(this->ymin)) && (table.at(i).at(column)<(this->ymax))) {
                 texfile << "    \\fill[" << color << "] (" << this->xPosition(table.at(i).at(0)) << ", " << this->yPosition(table.at(i).at(column)) << ") circle [radius=1pt];" << std::endl;
             }
@@ -187,14 +187,14 @@ void GMMakeCode::writeData(std::ofstream& texfile, const std::vector<std::vector
     } else {
         texfile << "    \\draw[" << color << ", line width=1pt]";
         int line_count = 0;
-        for (int i = 0; i < table.size(); i++) {
+        for (int i = 0; i < static_cast<int>(table.size()); i++) {
             if ((table.at(i).at(0)>=(this->xmin)) && (table.at(i).at(0)<(this->xmax)) && (table.at(i).at(column)>=(this->ymin)) && (table.at(i).at(column)<(this->ymax))) {
                 if (line_count > 0) {
                     texfile << " --";
                 }
                 texfile << " (" << this->xPosition(table.at(i).at(0)) << ", " << this->yPosition(table.at(i).at(column)) << ")";
                 line_count++;
-                if ((line_count%5==4) && (i!=table.size()-1)) {
+                if ((line_count%5==4) && (i!=(static_cast<int>(table.size()))-1)) {
                     texfile << " %" << std::endl;
                     texfile << "       ";
                 }
@@ -264,7 +264,7 @@ void GMMakeCode::makeTitle(std::vector<std::string>& title_list, std::string tit
                     line_vector.push_back(field);
                 }
 
-                if (!F_empty_field && line_vector.size()==data_number) {
+                if (!F_empty_field && static_cast<int>(line_vector.size())==data_number) {
                     for (int i = 0; i < data_number; i++) {
                         title_list.push_back(line_vector.at(i));
                     }
@@ -478,7 +478,7 @@ void GMMakeCode::linearRegression(const std::vector<std::vector<double>>& table,
     double X2 = 0;
     double XY = 0;
     int N = table.size();
-    for (int i = 0; i < table.size(); i++) {
+    for (int i = 0; i < static_cast<int>(table.size()); i++) {
         X += table.at(i).at(0);
         Y += table.at(i).at(column);
         X2 += std::pow(table.at(i).at(0), 2);
